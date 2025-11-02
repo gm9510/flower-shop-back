@@ -1,5 +1,6 @@
 from fastapi import APIRouter, FastAPI
 from app.database import engine
+from fastapi.middleware.cors import CORSMiddleware
 
 # Import routers
 from app.endpoints.categorias import router as categorias_router
@@ -10,6 +11,7 @@ from app.endpoints.cupones import router as cupones_router
 from app.endpoints.metodos_envio import router as metodos_envio_router
 from app.endpoints.sedes import router as sedes_router
 from app.endpoints.entidades import router as entidades_router
+from app.endpoints.pedidos import router as pedidos_router
 
 # Create tables
 from app.models import Base
@@ -21,6 +23,21 @@ app = FastAPI(
     version="1.0.0"
 )
 
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "http://localhost:8000",
+    # Add other allowed origins as needed
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all HTTP methods for CORS requests
+    allow_headers=["*"],  # Allows all headers for CORS requests
+)
+
 api_router = APIRouter()
 api_router.include_router(categorias_router, tags=["categorias"])
 api_router.include_router(productos_router, tags=["productos"])
@@ -30,6 +47,7 @@ api_router.include_router(cupones_router, tags=["cupones"])
 api_router.include_router(metodos_envio_router, tags=["metodos-envio"])
 api_router.include_router(sedes_router, tags=["sedes"])
 api_router.include_router(entidades_router, tags=["entidades"])
+api_router.include_router(pedidos_router, tags=["pedidos"])
 app.include_router(api_router)
 
 @app.get("/")
