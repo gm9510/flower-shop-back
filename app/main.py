@@ -12,6 +12,7 @@ from app.endpoints.metodos_envio import router as metodos_envio_router
 from app.endpoints.sedes import router as sedes_router
 from app.endpoints.entidades import router as entidades_router
 from app.endpoints.pedidos import router as pedidos_router
+from app.endpoints.itemspedido import router as itemspedido_router
 
 # Create tables
 from app.models import Base
@@ -48,6 +49,7 @@ api_router.include_router(metodos_envio_router, tags=["metodos-envio"])
 api_router.include_router(sedes_router, tags=["sedes"])
 api_router.include_router(entidades_router, tags=["entidades"])
 api_router.include_router(pedidos_router, tags=["pedidos"])
+api_router.include_router(itemspedido_router, tags=["items-pedido"])
 app.include_router(api_router)
 
 @app.get("/")
