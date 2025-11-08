@@ -127,7 +127,8 @@ def create_pedido(pedido: PedidosCreate, db: Session = Depends(get_db)):
         metodoPago=pedido.metodoPago,
         direccionEnvio=pedido.direccionEnvio,
         cuponId=pedido.cuponId,
-        metodoEnvioId=pedido.metodoEnvioId
+        metodoEnvioId=pedido.metodoEnvioId,
+        fechaEnvio=pedido.fechaEnvio
     )
     
     db.add(db_pedido)
