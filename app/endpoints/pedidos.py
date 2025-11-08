@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query, Path
 from sqlalchemy.orm import Session, joinedload
 from typing import List, Optional
@@ -14,10 +15,24 @@ def get_pedidos(
     cliente_id: Optional[int] = Query(None, description="Filtrar por ID de cliente"),
     estado_pedido: Optional[str] = Query(None, description="Filtrar por estado del pedido"),
     estado_pago: Optional[str] = Query(None, description="Filtrar por estado del pago"),
+    fecha_envio_desde: Optional[datetime] = Query(None, description="Filtrar por fecha de envío desde (YYYY-MM-DD o YYYY-MM-DD HH:MM:SS)"),
+    fecha_envio_hasta: Optional[datetime] = Query(None, description="Filtrar por fecha de envío hasta (YYYY-MM-DD o YYYY-MM-DD HH:MM:SS)"),
     db: Session = Depends(get_db)
 ):
     """
-    Obtener lista de pedidos con filtros opcionales y paginación
+    Obtener lista de pedidos con filtros opcionales y paginación.
+    
+    Filtros disponibles:
+    - cliente_id: ID del cliente
+    - estado_pedido: pendiente, procesando, enviado, entregado, cancelado
+    - estado_pago: pendiente, pagado, fallido, reembolsado
+    - fecha_envio_desde: Fecha mínima de envío (inclusive)
+    - fecha_envio_hasta: Fecha máxima de envío (inclusive)
+    
+    Ejemplos de uso:
+    - /pedidos?fecha_envio_desde=2025-11-01&fecha_envio_hasta=2025-11-30
+    - /pedidos?fecha_envio_desde=2025-11-10 10:00:00
+    - /pedidos?fecha_envio_hasta=2025-11-15
     """
     query = db.query(Pedidos)
     
@@ -29,6 +44,12 @@ def get_pedidos(
     if estado_pago:
         query = query.filter(Pedidos.estadoPago == estado_pago)
     
+    # Filtros de rango de fecha de envío
+    if fecha_envio_desde:
+        query = query.filter(Pedidos.fechaEnvio >= fecha_envio_desde)
+    if fecha_envio_hasta:
+        query = query.filter(Pedidos.fechaEnvio <= fecha_envio_hasta)
+
     # Ordenar por fecha de creación (más recientes primero)
     query = query.order_by(Pedidos.creadoEn.desc())
     
@@ -64,6 +85,7 @@ def get_pedido(
         direccionEnvio=pedido.direccionEnvio,
         cuponId=pedido.cuponId,
         metodoEnvioId=pedido.metodoEnvioId,
+        fechaEnvio=pedido.fechaEnvio,
         creadoEn=pedido.creadoEn,
         cliente_nombre=f"{pedido.cliente.nombre} {pedido.cliente.apellido}" if pedido.cliente else None,
         cliente_email=pedido.cliente.email if pedido.cliente else None,

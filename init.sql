@@ -81,6 +81,7 @@ CREATE TABLE pedidos (
     estadoPago ENUM('pendiente', 'pagado', 'fallido', 'reembolsado') DEFAULT 'pendiente',
     metodoPago VARCHAR(50),
     direccionEnvio TEXT,
+    fechaEnvio TIMESTAMP NOT NULL,
     cuponId INT DEFAULT NULL,
     metodoEnvioId INT,
     creadoEn TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -228,9 +229,9 @@ INSERT INTO clientes (nombre, apellido, email, telefono, direccion) VALUES
 ('Carlos', 'Rincón', 'carlos@example.com', '3019876543', 'Av. 68 #22-15');
 
 -- PEDIDOS
-INSERT INTO pedidos (clienteId, montoTotal, estadoPedido, estadoPago, metodoPago, direccionEnvio, cuponId, metodoEnvioId) VALUES
-(1, 530.00, 'pendiente', 'pendiente', 'tarjeta', 'Calle 45 #10-20', 1, 2),
-(2, 1500.00, 'procesando', 'pagado', 'efectivo', 'Av. 68 #22-15', NULL, 1);
+INSERT INTO pedidos (clienteId, montoTotal, estadoPedido, estadoPago, metodoPago, direccionEnvio, cuponId, metodoEnvioId, fechaEnvio) VALUES
+(1, 530.00, 'pendiente', 'pendiente', 'tarjeta', 'Calle 45 #10-20', 1, 2, '2025-11-10 10:00:00'),
+(2, 1500.00, 'procesando', 'pagado', 'efectivo', 'Av. 68 #22-15', NULL, 1, '2025-11-08 14:30:00');
 
 INSERT INTO itemsPedido (pedidoId, productoId, cantidad, precioUnitario, subtotal) VALUES
 (1, 1, 5, 55.00, 275.00),

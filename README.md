@@ -252,13 +252,56 @@ nerdctl compose down
 ### Base de Datos
 ```bash
 # Conectar a MariaDB
-docker-compose exec db mysql -u fastapi_user -p floristeria
+docker exec -it fastapi-mariadb mariadb -uroot -prootpassword floristeria
+
+# Ver estructura de una tabla
+docker exec -it fastapi-mariadb mariadb -uroot -prootpassword floristeria -e "DESCRIBE pedidos;"
+
+# Consultar datos
+docker exec -it fastapi-mariadb mariadb -uroot -prootpassword floristeria -e "SELECT * FROM pedidos;"
 
 # Backup de BD
-docker-compose exec db mysqldump -u root -p floristeria > backup.sql
+docker exec fastapi-mariadb mariadb-dump -uroot -prootpassword floristeria > backup.sql
 
-# Restaurar BD
-docker-compose exec -T db mysql -u root -p floristeria < backup.sql
+# Restaurar BD desde backup
+docker exec -i fastapi-mariadb mariadb -uroot -prootpassword floristeria < backup.sql
+```
+
+### 🔄 Reconstruir Base de Datos con init.sql
+
+Si necesitas reconstruir la base de datos desde cero con el esquema actualizado:
+
+```bash
+# 1. Detener y eliminar contenedores existentes (⚠️ ESTO ELIMINA TODOS LOS DATOS)
+docker-compose down -v
+
+# 2. Iniciar el contenedor de base de datos
+# El archivo init.sql se ejecutará automáticamente en la primera inicialización
+docker-compose up -d db
+
+# 3. Esperar a que la base de datos esté lista (5-10 segundos)
+sleep 8
+
+# 4. Verificar que la base de datos se creó correctamente
+docker exec -it fastapi-mariadb mariadb -uroot -prootpassword floristeria -e "SHOW TABLES;"
+
+# 5. (Opcional) Cargar datos de prueba adicionales desde datos.sql
+docker exec -i fastapi-mariadb mariadb -uroot -prootpassword floristeria < datos.sql
+```
+
+**Nota:** El archivo `init.sql` está montado en `/docker-entrypoint-initdb.d/` dentro del contenedor de MariaDB (ver `docker-compose.yml`). MariaDB ejecuta automáticamente todos los archivos `.sql` en este directorio cuando la base de datos se crea por primera vez.
+
+**⚠️ Importante:** El comando `docker-compose down -v` elimina todos los volúmenes, incluyendo los datos de la base de datos. Asegúrate de hacer un backup si tienes datos importantes.
+
+### 📊 Cargar Datos de Prueba
+
+El proyecto incluye dos archivos SQL:
+- **`init.sql`**: Esquema completo de la base de datos + datos básicos de inicialización
+- **`datos.sql`**: Datos de prueba extendidos con todos los casos de enumeraciones
+
+```bash
+# Cargar datos de prueba completos (después de que la BD esté inicializada)
+docker exec -i fastapi-mariadb mariadb -uroot -prootpassword floristeria < datos.sql
 ```
 
 ## 🧪 Testing

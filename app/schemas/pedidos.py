@@ -13,6 +13,7 @@ class PedidosCreate(BaseModel):
     direccionEnvio: Optional[str] = Field(None, description="Dirección de envío")
     cuponId: Optional[int] = Field(None, description="ID del cupón aplicado")
     metodoEnvioId: Optional[int] = Field(None, description="ID del método de envío")
+    fechaEnvio: Optional[datetime] = Field(None, description="Fecha programada de envío")
 
     class Config:
         json_schema_extra = {
@@ -37,6 +38,7 @@ class PedidosUpdate(BaseModel):
     direccionEnvio: Optional[str] = Field(None, description="Dirección de envío")
     cuponId: Optional[int] = Field(None, description="ID del cupón aplicado")
     metodoEnvioId: Optional[int] = Field(None, description="ID del método de envío")
+    fechaEnvio: Optional[datetime] = Field(None, description="Fecha programada de envío")
 
     class Config:
         json_schema_extra = {
@@ -58,6 +60,7 @@ class PedidosResponse(BaseModel):
     direccionEnvio: Optional[str] = None
     cuponId: Optional[int] = None
     metodoEnvioId: Optional[int] = None
+    fechaEnvio: datetime
     creadoEn: datetime
 
     class Config:
@@ -75,6 +78,7 @@ class PedidosDetail(BaseModel):
     direccionEnvio: Optional[str] = None
     cuponId: Optional[int] = None
     metodoEnvioId: Optional[int] = None
+    fechaEnvio: datetime
     creadoEn: datetime
     # Información relacionada (se puede agregar según necesidades)
     cliente_nombre: Optional[str] = None

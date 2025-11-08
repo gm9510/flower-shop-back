@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, Text, DECIMAL, DateTime, Date, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, Text, DECIMAL, DateTime, Date, ForeignKey, Enum, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone
 import enum
 
 Base = declarative_base()
@@ -47,8 +47,8 @@ class Producto(Base):
     precio = Column(DECIMAL(10, 2), nullable=False)
     categoriaId = Column(Integer, ForeignKey("categorias.id"))
     imagenUrl = Column(String(500))
-    creadoEn = Column(DateTime, default=datetime.utcnow)
-    actualizadoEn = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    creadoEn = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
+    actualizadoEn = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'), onupdate=text('CURRENT_TIMESTAMP'))
 
     categoria = relationship("Categoria", back_populates="productos")
     inventario = relationship("Inventario", back_populates="producto")
@@ -62,8 +62,8 @@ class Inventario(Base):
     id = Column(Integer, primary_key=True, index=True)
     productoId = Column(Integer, ForeignKey("productos.id"))
     cantidadStock = Column(Integer, nullable=False)
-    cantidadMinima = Column(Integer, default=0)
-    ultimaActualizacion = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    cantidadMinima = Column(Integer, server_default='0')
+    ultimaActualizacion = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'), onupdate=text('CURRENT_TIMESTAMP'))
 
     producto = relationship("Producto", back_populates="inventario")
 
@@ -76,7 +76,7 @@ class Cliente(Base):
     email = Column(String(255), unique=True, nullable=False)
     telefono = Column(String(20))
     direccion = Column(Text)
-    creadoEn = Column(DateTime, default=datetime.utcnow)
+    creadoEn = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
 
     carritos = relationship("CarritoCompras", back_populates="cliente")
     pedidos = relationship("Pedidos", back_populates="cliente")
@@ -87,8 +87,8 @@ class CarritoCompras(Base):
     id = Column(Integer, primary_key=True, index=True)
     clienteId = Column(Integer, ForeignKey("clientes.id"))
     productoId = Column(Integer, ForeignKey("productos.id"))
-    cantidad = Column(Integer, nullable=False, default=1)
-    agregadoEn = Column(DateTime, default=datetime.utcnow)
+    cantidad = Column(Integer, nullable=False, server_default=text('1'))
+    agregadoEn = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
 
     cliente = relationship("Cliente", back_populates="carritos")
     producto = relationship("Producto", back_populates="carritos")
@@ -99,13 +99,14 @@ class Pedidos(Base):
     id = Column(Integer, primary_key=True, index=True)
     clienteId = Column(Integer, ForeignKey("clientes.id"))
     montoTotal = Column(DECIMAL(10, 2), nullable=False)
-    estadoPedido = Column(Enum('pendiente', 'procesando', 'enviado', 'entregado', 'cancelado', name='estado_pedido_enum'), default='pendiente')
-    estadoPago = Column(Enum('pendiente', 'pagado', 'fallido', 'reembolsado', name='estado_pago_enum'), default='pendiente')
+    estadoPedido = Column(Enum('pendiente', 'procesando', 'enviado', 'entregado', 'cancelado', name='estado_pedido_enum'), server_default=text("'pendiente'"))
+    estadoPago = Column(Enum('pendiente', 'pagado', 'fallido', 'reembolsado', name='estado_pago_enum'), server_default=text("'pendiente'"))
     metodoPago = Column(String(50))
     direccionEnvio = Column(Text)
     cuponId = Column(Integer, ForeignKey("cupones.id"))
     metodoEnvioId = Column(Integer, ForeignKey("metodosEnvio.id"))
-    creadoEn = Column(DateTime, default=datetime.utcnow)
+    fechaEnvio = Column(DateTime, nullable=False)
+    creadoEn = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
 
     cliente = relationship("Cliente", back_populates="pedidos")
     cupon = relationship("Cupon", back_populates="pedidos")
@@ -133,10 +134,10 @@ class Pagos(Base):
     pedidoId = Column(Integer, ForeignKey("pedidos.id"))
     pasarelaPagoId = Column(String(255), nullable=False)  # ID de la transacción en la pasarela
     monto = Column(DECIMAL(10, 2), nullable=False)
-    estadoPago = Column(Enum('pendiente', 'completado', 'fallido', 'reembolsado', name='estado_pago_pago_enum'), default='pendiente')
+    estadoPago = Column(Enum('pendiente', 'completado', 'fallido', 'reembolsado', name='estado_pago_pago_enum'), server_default=text("'pendiente'"))
     metodoPago = Column(String(50))
     transaccionId = Column(String(255))
-    creadoEn = Column(DateTime, default=datetime.utcnow)
+    creadoEn = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
 
     pedido = relationship("Pedidos", back_populates="pagos")
 
@@ -171,8 +172,8 @@ class Compras(Base):
     idProveedor = Column(Integer, ForeignKey("entidades.id"))
     idSede = Column(Integer, ForeignKey("sedes.id"))
     total = Column(DECIMAL(10, 2), nullable=False)
-    estadoCompra = Column(Enum('pendiente', 'recibida', 'cancelada', name='estado_compra_enum'), default='pendiente')
-    creadoEn = Column(DateTime, default=datetime.utcnow)
+    estadoCompra = Column(Enum('pendiente', 'recibida', 'cancelada', name='estado_compra_enum'), server_default=text("'pendiente'"))
+    creadoEn = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
 
     proveedor = relationship("Entidad")
     sede = relationship("Sede")
