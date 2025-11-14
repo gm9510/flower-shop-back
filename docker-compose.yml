@@ -1,0 +1,35 @@
+services:
+  db:
+    image: mariadb:10.11
+    container_name: floristeria_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: floristeria
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"  # Cambiado de 3306 a 3307 para evitar conflictos
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Para inicializar con datos si es necesario
+
+  api:
+    build: .
+    container_name: floristeria_api
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_HOST: db
+      DB_PORT: 3306  # Este es el puerto interno del contenedor, no cambia
+      DB_NAME: floristeria
+    depends_on:
+      - db
+    volumes:
+      - .:/app  # Montar el código para desarrollo (eliminar en producción)
+
+volumes:
+  db_data:
