@@ -36,6 +36,7 @@ class Pedido(Base):
     estadoPago = Column(Enum(EstadoPagoEnum), default=EstadoPagoEnum.pendiente)
     metodoPago = Column(String(15), default="DE CONTADO")
     direccionEnvio = Column(Text, nullable=True)
+    fechaEntrega = Column(DateTime, nullable=False)
     idCupon = Column(Integer, nullable=True)
     idEnvio = Column(Integer, nullable=True)
     efectivo = Column(Integer, nullable=True)
