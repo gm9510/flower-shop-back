@@ -30,7 +30,6 @@ class PedidoBase(BaseModel):
     estadoPedido: Optional[EstadoPedidoEnum] = EstadoPedidoEnum.pendiente
     estadoPago: Optional[EstadoPagoEnum] = EstadoPagoEnum.pendiente
     metodoPago: Optional[str] = "DE CONTADO"
-    fechaEntrega: datetime = None
     direccionEnvio: Optional[str] = None
     idCupon: Optional[int] = None
     idEnvio: Optional[int] = None
