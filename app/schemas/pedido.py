@@ -36,6 +36,7 @@ class PedidoBase(BaseModel):
     efectivo: Optional[int] = None
     transferencia: Optional[int] = None
     usuario: Optional[str] = None
+    fechaEntrega: Optional[datetime] = None
     registro: Optional[datetime] = None
 
 

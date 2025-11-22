@@ -12,6 +12,7 @@ from .pedidopago import PedidoPago
 from .pedidoenvio import PedidoEnvio
 from .pedidocupon import PedidoCupon
 from .productoensamble import ProductoEnsamble
+from .user import User
 
 __all__ = [
     "Entidad",
@@ -27,5 +28,6 @@ __all__ = [
     "PedidoPago",
     "PedidoEnvio",
     "PedidoCupon",
-    "ProductoEnsamble"
+    "ProductoEnsamble",
+    "User"
 ]

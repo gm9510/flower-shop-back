@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app import schemas, models
+from app.auth.clerk_auth import get_current_user
 from app.database import get_db
 
 router = APIRouter()
@@ -10,7 +11,7 @@ router = APIRouter()
 
 
 @router.post("/pedidos/", response_model=schemas.Pedido)
-def create_pedido(pedido: schemas.PedidoCreate, db: Session = Depends(get_db)):
+def create_pedido(pedido: schemas.PedidoCreate, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     db_pedido = models.Pedido(**pedido.model_dump())
     db.add(db_pedido)
     db.commit()
@@ -33,7 +34,7 @@ def read_pedido(pedido_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/pedidos/{pedido_id}", response_model=schemas.Pedido)
-def update_pedido(pedido_id: int, pedido: schemas.PedidoUpdate, db: Session = Depends(get_db)):
+def update_pedido(pedido_id: int, pedido: schemas.PedidoUpdate, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     db_pedido = db.query(models.Pedido).filter(models.Pedido.id == pedido_id).first()
     if db_pedido is None:
         raise HTTPException(status_code=404, detail="Pedido no encontrado")
@@ -47,7 +48,7 @@ def update_pedido(pedido_id: int, pedido: schemas.PedidoUpdate, db: Session = De
 
 
 @router.delete("/pedidos/{pedido_id}")
-def delete_pedido(pedido_id: int, db: Session = Depends(get_db)):
+def delete_pedido(pedido_id: int, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     db_pedido = db.query(models.Pedido).filter(models.Pedido.id == pedido_id).first()
     if db_pedido is None:
         raise HTTPException(status_code=404, detail="Pedido no encontrado")
