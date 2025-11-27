@@ -12,7 +12,6 @@ services:
       - "3307:3306"  # Cambiado de 3306 a 3307 para evitar conflictos
     volumes:
       - db_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Para inicializar con datos si es necesario
 
   api:
     build: .
@@ -28,8 +27,6 @@ services:
       DB_NAME: floristeria
     depends_on:
       - db
-    volumes:
-      - .:/app  # Montar el código para desarrollo (eliminar en producción)
 
 volumes:
   db_data:
