@@ -19,8 +19,30 @@ def create_producto(producto: schemas.ProductoCreate, db: Session = Depends(get_
 
 
 @router.get("/productos/", response_model=List[schemas.Producto])
-def read_productos(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    productos = db.query(models.Producto).offset(skip).limit(limit).all()
+def read_productos(
+    skip: int = 0, 
+    limit: int = 100,
+    tipo: str = None,
+    estado: str = None,
+    nombre_like: str = None,
+    codbarra: str = None,
+    categoria: str = None,
+    db: Session = Depends(get_db)
+):
+    query = db.query(models.Producto)
+    
+    if tipo is not None:
+        query = query.filter(models.Producto.tipo == tipo)
+    if estado is not None:
+        query = query.filter(models.Producto.estado == estado)
+    if nombre_like is not None:
+        query = query.filter(models.Producto.nombre.like(f"%{nombre_like}%"))
+    if codbarra is not None:
+        query = query.filter(models.Producto.codbarra == codbarra)
+    if categoria is not None:
+        query = query.filter(models.Producto.categoria == categoria)
+    
+    productos = query.offset(skip).limit(limit).all()
     return productos
 
 

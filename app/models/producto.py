@@ -13,9 +13,9 @@ class Producto(Base):
     tipo = Column(String(45), server_default='SIMPLE')
     categoria = Column(String(20), nullable=False)
     codbarra = Column(String(250), nullable=True)
-    estado = Column(String(2), nullable=True)
+    estado = Column(String(200), nullable=True)
     descripcion = Column(Text, nullable=True)
-    imagenUrl = Column(String(500), nullable=True)
+    imagenUrl = Column(String(1024), nullable=True)
 
     # Relación con carritoDetalle
     carrito_detalles = relationship("CarritoDetalle", back_populates="producto")
