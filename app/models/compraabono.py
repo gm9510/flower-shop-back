@@ -17,7 +17,7 @@ class CompraAbono(Base):
     id = Column(Integer, primary_key=True, index=True)
     idCompra = Column(Integer, ForeignKey("compra.id"), nullable=False)
     valor = Column(Float(32, 2), nullable=False)
-    opcionPago = Column(Enum(OpcionPagoEnum), default=OpcionPagoEnum.EFECTIVO)  # Este enum se define en la tabla compra
+    opcionPago = Column(Enum(OpcionPagoEnum), server_default="efectivo")
     registro = Column(DateTime, nullable=False)
     usuario = Column(String(15), nullable=True)
 

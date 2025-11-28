@@ -1,5 +1,5 @@
 services:
-  db:
+  mariaserverdb:
     image: mariadb:10.11
     container_name: floristeria_db
     restart: always
@@ -18,15 +18,15 @@ services:
     container_name: floristeria_api
     restart: always
     ports:
-      - "8000:8000"
+      - "8000:80"
     environment:
       DB_USER: user
       DB_PASSWORD: password
-      DB_HOST: db
+      DB_HOST:  mariaserverdb
       DB_PORT: 3306  # Este es el puerto interno del contenedor, no cambia
       DB_NAME: floristeria
     depends_on:
-      - db
+      - mariaserverdb
 
 volumes:
   db_data:

@@ -5,8 +5,8 @@ from enum import Enum
 
 
 class TipoDescuentoEnum(str, Enum):
-    porcentaje = "porcentaje"
-    monto_fijo = "monto_fijo"
+    PORCENTAJE = "porcentaje"
+    MONTO_FIJO = "monto_fijo"
 
 
 # Esquema para PedidoCupon

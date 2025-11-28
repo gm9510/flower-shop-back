@@ -10,7 +10,7 @@ class Producto(Base):
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String(200), nullable=True)
     precioVenta = Column(SqlInt, nullable=True)
-    tipo = Column(String(45), default='SIMPLE')
+    tipo = Column(String(45), server_default='SIMPLE')
     categoria = Column(String(20), nullable=False)
     codbarra = Column(String(250), nullable=True)
     estado = Column(String(2), nullable=True)

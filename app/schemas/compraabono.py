@@ -5,15 +5,16 @@ from enum import Enum
 
 
 class OpcionPagoEnum(str, Enum):
-    efectivo = "efectivo"
-    transferencia = "trasnferencia"
+    EFECTIVO = "efectivo"
+    TARJETA = "tarjeta"
+    TRANSFERENCIA = "transferencia"
 
 
 # Esquema para CompraAbono
 class CompraAbonoBase(BaseModel):
     idCompra: int
     valor: float
-    opcionPago: Optional[OpcionPagoEnum] = OpcionPagoEnum.efectivo
+    opcionPago: Optional[OpcionPagoEnum] = OpcionPagoEnum.EFECTIVO
     registro: datetime
     usuario: Optional[str] = None
 
