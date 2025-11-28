@@ -11,7 +11,7 @@ class Carrito(Base):
     id = Column(Integer, primary_key=True, index=True)
     idEntidad = Column(Integer, ForeignKey("entidad.id"), nullable=True)
     sessionToken = Column(String(100), nullable=False)
-    registro = Column(DateTime, default=func.now())
+    registro = Column(DateTime, server_default=func.now())
 
     # Relación con entidad
     entidad = relationship("Entidad", back_populates="carritos")

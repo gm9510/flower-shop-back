@@ -9,7 +9,7 @@ class Inventario(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     idProducto = Column(Integer, ForeignKey("producto.id"), nullable=True)
-    stock = Column(Float(12, 2), default=0.0)
+    stock = Column(Float(12, 2), server_default="0.0")
 
     # Relación con producto
     producto = relationship("Producto", back_populates="inventario")

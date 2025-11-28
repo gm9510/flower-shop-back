@@ -8,5 +8,5 @@ class PedidoEnvio(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String(100), nullable=False)
-    costo = Column(Float(10, 2), default=0.0)
+    costo = Column(Float(10, 2), server_default="0.0")
     tiempoEstimadoEntrega = Column(Integer, nullable=True)

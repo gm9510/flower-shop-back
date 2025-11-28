@@ -12,7 +12,7 @@ class CompraDetalle(Base):
     idProducto = Column(Integer, ForeignKey("producto.id"), nullable=False)
     cantidad = Column(Integer, nullable=False)
     costo = Column(Float(10, 2), nullable=False)
-    iva = Column(Integer, default=0)
+    iva = Column(Integer, server_default="0")
     costoIva = Column(Float(10, 2), nullable=False)
     totalUnitario = Column(Float(15, 2), nullable=True)
     precioVenta = Column(Float(10, 2), nullable=True)

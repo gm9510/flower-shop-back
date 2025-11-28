@@ -19,8 +19,24 @@ def create_productoensamble(productoensamble: schemas.ProductoEnsambleCreate, db
 
 
 @router.get("/productoensambles/", response_model=List[schemas.ProductoEnsamble])
-def read_productoensambles(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    productoensambles = db.query(models.ProductoEnsamble).offset(skip).limit(limit).all()
+def read_productoensambles(
+    skip: int = 0, 
+    limit: int = 100, 
+    idProductoPadre: int = None,
+    idProductoHijo: int = None,
+    cantidad: float = None,
+    db: Session = Depends(get_db)
+):
+    query = db.query(models.ProductoEnsamble)
+    
+    if idProductoPadre is not None:
+        query = query.filter(models.ProductoEnsamble.idProductoPadre == idProductoPadre)
+    if idProductoHijo is not None:
+        query = query.filter(models.ProductoEnsamble.idProductoHijo == idProductoHijo)
+    if cantidad is not None:
+        query = query.filter(models.ProductoEnsamble.cantidad == cantidad)
+    
+    productoensambles = query.offset(skip).limit(limit).all()
     return productoensambles
 
 
@@ -40,6 +56,19 @@ def update_productoensamble(productoensamble_id: int, productoensamble: schemas.
     
     for key, value in productoensamble.model_dump().items():
         setattr(db_productoensamble, key, value)
+    
+    db.commit()
+    db.refresh(db_productoensamble)
+    return db_productoensamble
+
+
+@router.patch("/productoensambles/{productoensamble_id}/cantidad", response_model=schemas.ProductoEnsamble)
+def update_productoensamble_cantidad(productoensamble_id: int, cantidad: float, db: Session = Depends(get_db)):
+    db_productoensamble = db.query(models.ProductoEnsamble).filter(models.ProductoEnsamble.id == productoensamble_id).first()
+    if db_productoensamble is None:
+        raise HTTPException(status_code=404, detail="Producto ensamble no encontrado")
+    
+    db_productoensamble.cantidad = cantidad
     
     db.commit()
     db.refresh(db_productoensamble)

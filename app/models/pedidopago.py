@@ -24,11 +24,11 @@ class PedidoPago(Base):
     idPedido = Column(Integer, ForeignKey("pedido.id"), nullable=False)
     pasarelaPagoId = Column(String(255), nullable=False)
     monto = Column(Float(10, 2), nullable=False)
-    estadoPago = Column(Enum(EstadoPagoEnum), default=EstadoPagoEnum.PENDIENTE)  # Este enum se define en la tabla pedido
-    opcionPago = Column(Enum(OpcionPagoEnum), default=OpcionPagoEnum.EFECTIVO)  # Este enum se define en la tabla compra
+    estadoPago = Column(Enum(EstadoPagoEnum), server_default="pendiente")  # Este enum se define en la tabla pedido
+    opcionPago = Column(Enum(OpcionPagoEnum), server_default="efectivo")  # Este enum se define en la tabla compra
     idTransaccion = Column(String(255), nullable=True)
     usuario = Column(String(15), nullable=True)
-    registro = Column(DateTime, default=func.now())
+    registro = Column(DateTime, server_default=func.now())
 
     # Relación con pedido
     pedido = relationship("Pedido", back_populates="pagos")

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
 from app.endpoints import (
     entidades, productos, pedidos,
@@ -13,6 +14,15 @@ app = FastAPI(
     title="MariaDB FastAPI Project",
     description="API con FastAPI y MariaDB",
     version="1.0.0"
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins - configure for production
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods including OPTIONS
+    allow_headers=["*"],  # Allows all headers
 )
 
 # Create database tables
