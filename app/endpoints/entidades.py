@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from typing import List
 from app import schemas, models
 from app.database import get_db
@@ -19,8 +20,26 @@ def create_entidad(entidad: schemas.EntidadCreate, db: Session = Depends(get_db)
 
 
 @router.get("/entidades/", response_model=List[schemas.Entidad])
-def read_entidades(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    entidades = db.query(models.Entidad).offset(skip).limit(limit).all()
+def read_entidades(
+    skip: int = 0, 
+    limit: int = 100,
+    search: str = None,
+    db: Session = Depends(get_db)
+):
+    query = db.query(models.Entidad)
+    
+    if search is not None:
+        search_pattern = f"%{search}%"
+        query = query.filter(
+            or_(
+                models.Entidad.nombre.like(search_pattern),
+                models.Entidad.correo.like(search_pattern),
+                models.Entidad.direccion.like(search_pattern),
+                models.Entidad.nit.like(search_pattern)
+            )
+        )
+    
+    entidades = query.offset(skip).limit(limit).all()
     return entidades
 
 

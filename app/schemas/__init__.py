@@ -15,6 +15,7 @@ from .pedidopago import PedidoPagoBase, PedidoPagoCreate, PedidoPagoUpdate, Pedi
 from .pedidoenvio import PedidoEnvioBase, PedidoEnvioCreate, PedidoEnvioUpdate, PedidoEnvio
 from .pedidocupon import PedidoCuponBase, PedidoCuponCreate, PedidoCuponUpdate, PedidoCupon
 from .productoensamble import ProductoEnsambleBase, ProductoEnsambleCreate, ProductoEnsambleUpdate, ProductoEnsamble
+from .pagination import Page
 
 __all__ = [
     "EntidadBase", "EntidadCreate", "EntidadUpdate", "Entidad",
@@ -31,5 +32,6 @@ __all__ = [
     "PedidoEnvioBase", "PedidoEnvioCreate", "PedidoEnvioUpdate", "PedidoEnvio",
     "PedidoCuponBase", "PedidoCuponCreate", "PedidoCuponUpdate", "PedidoCupon",
     "ProductoEnsambleBase", "ProductoEnsambleCreate", "ProductoEnsambleUpdate", "ProductoEnsamble",
-    "MetodoPagoEnum", "EstadoPedidoEnum", "EstadoPagoEnum", "OpcionPagoEnum", "TipoDescuentoEnum"
+    "MetodoPagoEnum", "EstadoPedidoEnum", "EstadoPagoEnum", "OpcionPagoEnum", "TipoDescuentoEnum",
+    "Page"
 ]
