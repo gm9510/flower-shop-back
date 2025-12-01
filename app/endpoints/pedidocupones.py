@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from app import schemas, models
 from app.database import get_db
+from datetime import datetime
 
 router = APIRouter()
 
@@ -19,8 +20,22 @@ def create_pedidocupon(pedidocupon: schemas.PedidoCuponCreate, db: Session = Dep
 
 
 @router.get("/pedidocupones/", response_model=List[schemas.PedidoCupon])
-def read_pedidocupones(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    pedidocupones = db.query(models.PedidoCupon).offset(skip).limit(limit).all()
+def read_pedidocupones(
+    skip: int = 0,
+    limit: int = 100,
+    code: str = None,
+    active: bool = None,
+    db: Session = Depends(get_db)
+):
+    query = db.query(models.PedidoCupon)
+
+    if code is not None:
+        query = query.filter(models.PedidoCupon.codigo == code)
+    if active:
+        now = datetime.now()
+        query = query.filter(models.PedidoCupon.validoDesde <= now, models.PedidoCupon.validoHasta >= now)
+
+    pedidocupones = query.offset(skip).limit(limit).all()
     return pedidocupones
 
 
