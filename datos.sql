@@ -16,14 +16,12 @@ INSERT INTO entidad (nit, dv, nombre, telefono, correo, estado, direccion) VALUE
 -- PRODUCTOS
 -- ==============================
 INSERT INTO producto (nombre, precioVenta, tipo, categoria, codbarra, estado, descripcion, imagenUrl) VALUES
-('Rosa Roja Premium', 5500, 'SIMPLE', 'Rosas', '7501234567890', 'AC', 'Rosa roja importada, tallo largo', 'https://example.com/images/rosa_roja.jpg'),
-('Ramo de Rosas', 45000, 'ENSAMBLE', 'Arreglos', '7501234567891', 'AC', '12 rosas rojas con envoltura y moño', 'https://example.com/images/ramo_rosas.jpg'),
-('Tulipán Amarillo', 7200, 'SIMPLE', 'Tulipanes', '7501234567892', 'AC', 'Tulipán de color amarillo intenso', 'https://example.com/images/tulipan_amarillo.jpg'),
-('Orquídea Blanca', 65000, 'SIMPLE', 'Orquídeas', '7501234567893', 'AC', 'Orquídea phalaenopsis blanca', 'https://example.com/images/orquidea_blanca.jpg'),
-('Centro de Mesa Floral', 120000, 'ENSAMBLE', 'Arreglos', '7501234567894', 'AC', 'Arreglo para eventos y recepciones', 'https://example.com/images/centro_mesa.jpg'),
-('Lirio Blanco', 8500, 'SIMPLE', 'Lirios', '7501234567895', 'AC', 'Lirio blanco aromático', 'https://example.com/images/lirio_blanco.jpg'),
-('Girasol Grande', 6800, 'SIMPLE', 'Girasoles', '7501234567896', 'AC', 'Girasol grande y fresco', 'https://example.com/images/girasol.jpg'),
-('Ramo Mixto Primavera', 58000, 'ENSAMBLE', 'Arreglos', '7501234567897', 'AC', 'Combinación de flores de temporada', 'https://example.com/images/ramo_mixto.jpg');
+('Ramo de Rosas Romántic', 5500, 'SIMPLE', 'Bodas', '7501234567890', 'AC', 'Un hermoso arreglo de rosas premium perfectas para expresar tus sentimientos más profundos.', 'https://imgur.com/LXNTdLS.jgp '),
+('Girasoles de Alegría', 7200, 'SIMPLE', 'Cumpleaños', '7501234567892', 'AC', 'Girasoles brillantes y alegres para traer calidez y felicidad a cualquier espacio.', 'https://imgur.com/fIRF8rh.jgp'),
+('Elegancia para Bodas', 65000, 'SIMPLE', 'Bodas', '7501234567893', 'AC', 'Un arreglo sofisticado diseñado especialmente para bodas y eventos formales.', 'https://imgur.com/EP8SVs3.jgp'),
+('Azucenas Blancas de Condolencias', 120000, 'ENSAMBLE', 'Condolencias', '7501234567894', 'AC', 'Elegantes azucenas blancas expresando tus condolencias con gracia y respeto.', 'https://imgur.com/nVHmwei.jgp'),
+('Arco Iris de Cumpleaños', 8500, 'SIMPLE', 'Cumpleaños', '7501234567895', 'AC', 'Una mezcla vibrante de flores coloridas perfectas para celebraciones de cumpleaños.', 'https://imgur.com/nCpcqed.jgp'),
+('Tulipanes Clásicos', 6800, 'SIMPLE', 'Todos', '7501234567896', 'AC', 'Hermosos tulipanes rosas en un arreglo clásico de elegancia atemporal.', 'https://imgur.com/XJlUcZM.jgp');
 
 -- ==============================
 -- INVENTARIO
@@ -35,8 +33,8 @@ INSERT INTO inventario (idProducto, stock) VALUES
 (4, 25.00),
 (5, 10.00),
 (6, 80.00),
-(7, 120.00),
-(8, 15.00);
+-- (7, 120.00),
+ -- (8, 15.00);
 
 -- ==============================
 -- PRODUCTO ENSAMBLES (Ramos y arreglos compuestos)
@@ -50,8 +48,8 @@ INSERT INTO productoEnsamble (idProductoPadre, cantidad, idProductoHijo) VALUES
 (5, 4.00, 6),  -- 4 lirios
 -- Ramo Mixto Primavera (producto 8)
 (8, 3.00, 1),  -- 3 rosas
-(8, 4.00, 3),  -- 4 tulipanes
-(8, 2.00, 7);  -- 2 girasoles
+-- (8, 4.00, 3),  -- 4 tulipanes
+-- (8, 2.00, 7);  -- 2 girasoles
 
 -- ==============================
 -- CARRITOS
