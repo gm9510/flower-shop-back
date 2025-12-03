@@ -18,10 +18,23 @@ def create_pedido(pedido: schemas.PedidoCreate, db: Session = Depends(get_db)):
     return db_pedido
 
 
-@router.get("/pedidos/", response_model=List[schemas.Pedido])
-def read_pedidos(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    pedidos = db.query(models.Pedido).offset(skip).limit(limit).all()
-    return pedidos
+@router.get("/pedidos/", response_model=schemas.Page[schemas.Pedido])
+def read_pedidos(page: int = 1, page_size: int = 100, db: Session = Depends(get_db)):
+    skip = (page - 1) * page_size
+    total = db.query(models.Pedido).count()
+    pedidos = db.query(models.Pedido).offset(skip).limit(page_size).all()
+    
+    total_pages = (total + page_size - 1) // page_size
+    
+    return schemas.Page[
+        schemas.Pedido
+    ](
+        items=pedidos,
+        total=total,
+        page=page,
+        page_size=page_size,
+        total_pages=total_pages
+    )
 
 
 @router.get("/pedidos/{pedido_id}", response_model=schemas.Pedido)
